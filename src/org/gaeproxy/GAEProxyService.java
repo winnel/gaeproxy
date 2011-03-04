@@ -329,6 +329,13 @@ public class GAEProxyService extends Service {
 			return false;
 		}
 
+		String host = proxy.trim().toLowerCase().split("/")[2];
+		if (host == null || host.equals(""))
+			return false;
+		
+		// Add hosts here
+		runRootCommand(BASE + "sethosts.sh add " + appHost + " " + host);
+		
 		dnsServer = new DNSServer("DNS Server", 8153, "208.67.222.222", 5353,
 				appHost);
 		dnsServer.setBasePath(BASE);
@@ -400,6 +407,8 @@ public class GAEProxyService extends Service {
 	public void onDestroy() {
 		
 		stopForegroundCompat(1);
+		
+		runRootCommand(BASE + "sethosts.sh remove");
 		
 		notifyAlert(getString(R.string.forward_stop),
 				getString(R.string.service_stopped),

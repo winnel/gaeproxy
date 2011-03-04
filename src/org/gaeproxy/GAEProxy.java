@@ -233,6 +233,24 @@ public class GAEProxy extends PreferenceActivity implements
 		return true;
 	}
 
+	public static boolean runCommand(String command) {
+		Process process = null;
+		try {
+			process = Runtime.getRuntime().exec(command);
+			process.waitFor();
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return false;
+		} finally {
+			try {
+				process.destroy();
+			} catch (Exception e) {
+				// nothing
+			}
+		}
+		return true;
+	}
+	
 	private CheckBoxPreference isAutoConnectCheck;
 	private CheckBoxPreference isInstalledCheck;
 	private CheckBoxPreference isAutoSetProxyCheck;
@@ -382,11 +400,12 @@ public class GAEProxy extends PreferenceActivity implements
 		if (!isWorked(SERVICE_NAME)) {
 			CopyAssets("");
 
-			runRootCommand("chmod 777 /data/data/org.gaeproxy/iptables_g1");
-			runRootCommand("chmod 777 /data/data/org.gaeproxy/iptables_n1");
-			runRootCommand("chmod 777 /data/data/org.gaeproxy/redsocks");
-			runRootCommand("chmod 777 /data/data/org.gaeproxy/proxy.sh");
-			runRootCommand("chmod 777 /data/data/org.gaeproxy/localproxy.sh");
+			runCommand("chmod 777 /data/data/org.gaeproxy/iptables_g1");
+			runCommand("chmod 777 /data/data/org.gaeproxy/iptables_n1");
+			runCommand("chmod 777 /data/data/org.gaeproxy/redsocks");
+			runCommand("chmod 777 /data/data/org.gaeproxy/proxy.sh");
+			runCommand("chmod 777 /data/data/org.gaeproxy/localproxy.sh");
+			runCommand("chmod 777 /data/data/org.gaeproxy/sethosts.sh");
 		}
 	}
 
@@ -570,7 +589,7 @@ public class GAEProxy extends PreferenceActivity implements
 			return false;
 		}
 
-		runRootCommand("chmod 777 /data/data/org.gaeproxy/python/bin/python");
+		runCommand("chmod 777 /data/data/org.gaeproxy/python/bin/python");
 
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(this);
