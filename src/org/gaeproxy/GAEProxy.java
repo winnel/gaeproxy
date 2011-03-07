@@ -703,6 +703,10 @@ public class GAEProxy extends PreferenceActivity implements
 		}
 
 		runRootCommand(GAEProxyService.BASE + "proxy.sh stop");
+		
+		File cache = new File (GAEProxyService.BASE + "cache/dnscache");
+		if (cache.exists())
+			cache.delete();
 	}
 
 }
