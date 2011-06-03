@@ -430,14 +430,16 @@ public class GAEProxyService extends Service {
 				.getLastKnownLocation(locationProvider);
 		Geocoder geoCoder = new Geocoder(GAEProxyService.this);
 		try {
-			List<Address> addrs = geoCoder.getFromLocation(
-					lastKnownLocation.getLatitude(),
-					lastKnownLocation.getLongitude(), 1);
-			if (addrs != null && addrs.size() > 0) {
-				Address addr = addrs.get(0);
-				Log.d(TAG, "Location: " + addr.getCountryName());
-				if (!addr.getCountryCode().equals("CN"))
-					enableDNSProxy = false;
+			if (lastKnownLocation != null) {
+				List<Address> addrs = geoCoder.getFromLocation(
+						lastKnownLocation.getLatitude(),
+						lastKnownLocation.getLongitude(), 1);
+				if (addrs != null && addrs.size() > 0) {
+					Address addr = addrs.get(0);
+					Log.d(TAG, "Location: " + addr.getCountryName());
+					if (!addr.getCountryCode().equals("CN"))
+						enableDNSProxy = false;
+				}
 			}
 		} catch (IOException e) {
 			enableDNSProxy = true;
