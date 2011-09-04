@@ -18,22 +18,39 @@ case $1 in
 ip = 127.0.0.1
 port = $3
 visible = 1
-debug = INFO	
-
-[hosts]
-# NOTE: Only effect on https
 
 [gae]
-host = $2
+appid = $2
 password = $6
 path = /$5
+debuglevel = 0
+
+[proxy]
+enable = 0
+host = 10.0.0.172
+port = 80
+username = 
+password = 
+
+[google]
 prefer = http
-http_timeout = 5
-http_step = 8
-https_timeout = 8
-https_step = 16
+autoswitch = 0
+sites = .google.com|.googleusercontent.com|.googleapis.com|.google-analytics.com|.googlecode.com|.google.com.hk|.appspot.com|.android.com
+forcehttps = http://groups.google.com|http://code.google.com|http://mail.google.com|http://plus.google.com|http://docs.google.com|http://profiles.google.com|http://www.google.com/reader|http://developer.android.com
 http = $4
 https = $4
+
+[fetchmax]
+local =
+server =
+
+[autorange]
+hosts = .youtube.com|video.*.fbcdn.net|av.vimeo.com
+endswith = .jpg|.jpeg|.png|.bmp|.gif
+
+[hosts]
+__merge__ = 0
+www.253874.com = 76.73.90.170
 
 "> /data/data/org.gaeproxy/proxy.ini
  

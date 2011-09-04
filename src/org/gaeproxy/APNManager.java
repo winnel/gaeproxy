@@ -45,7 +45,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.util.Log;
 
 public class APNManager {
 
@@ -54,6 +57,7 @@ public class APNManager {
 	private static final String TYPE = "type";
 	private static final String PROXY = "proxy";
 	private static final String PORT = "port";
+	private static final String TAG = "GAEProxyAPNManager";
 
 	private static final Uri CONTENT_URI = Uri
 			.parse("content://telephony/carriers");
@@ -99,6 +103,21 @@ public class APNManager {
 			mCursor.moveToNext();
 		}
 		return result;
+	}
+
+	public static boolean isCMWap(Context context) {
+		ConnectivityManager manager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+		if (networkInfo == null)
+			return false;
+		if (!networkInfo.getTypeName().equals("WIFI")) {
+			Log.d(TAG, networkInfo.getExtraInfo());
+			if (networkInfo.getExtraInfo() != null &&
+					networkInfo.getExtraInfo().toLowerCase().equals("cmwap"))
+				return true;
+		}
+		return false;
 	}
 
 	public static void setAPNProxy(String proxy, String port, Context context) {
